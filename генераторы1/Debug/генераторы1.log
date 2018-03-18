@@ -14,6 +14,7 @@ c:\users\user\documents\visual studio 2015\projects\генераторы1\ген
 c:\users\user\documents\visual studio 2015\projects\генераторы1\генераторы1\one.cpp(318): warning C4018: <: несоответствие типов со знаком и без знака
 c:\users\user\documents\visual studio 2015\projects\генераторы1\генераторы1\one.cpp(330): warning C4244: аргумент: преобразование "__int64" в "int", возможна потеря данных
 c:\users\user\documents\visual studio 2015\projects\генераторы1\генераторы1\one.cpp(347): warning C4018: <: несоответствие типов со знаком и без знака
-c:\users\user\documents\visual studio 2015\projects\генераторы1\генераторы1\one.cpp(364): warning C4018: <: несоответствие типов со знаком и без знака
+c:\users\user\documents\visual studio 2015\projects\генераторы1\генераторы1\one.cpp(367): warning C4018: <: несоответствие типов со знаком и без знака
+c:\users\user\documents\visual studio 2015\projects\генераторы1\генераторы1\one.cpp(394): warning C4018: <: несоответствие типов со знаком и без знака
   генераторы1.vcxproj -> C:\Users\user\documents\visual studio 2015\Projects\генераторы1\Debug\генераторы1.exe
   генераторы1.vcxproj -> C:\Users\user\documents\visual studio 2015\Projects\генераторы1\Debug\генераторы1.pdb (Partial PDB)

@@ -5,10 +5,47 @@
 #include <string> 
 #include <bitset> 
 #include <cmath>
+#include <map>
+#include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
-vector <long long> lc(int x0, long long a, long long c, long long m, long long n) {
+int gen_int(int a, int b) {
+	srand(time(0));
+	return a + rand() % b;
+}
+long long gen_long(long long a, long long b) {
+	srand(time(0));
+	return a + rand() % b;
+}
+
+vector <long long> lc(map <string, string> params) {
+	int x0;
+	long long a, c, m, n;
+	if (params.find("x0")!= params.end())
+		x0 = stoi(params["x0"]);
+	else x0 = gen_int(1, 20);
+	while (x0 > 50 && x0 < 0) {
+		cout << "Выберете меньшее x0" << endl;
+		cout << "x0" << endl; cin >> x0;
+	}
+	if (params.find("a") != params.end())
+		a = stoi(params["a"]);
+	else a = gen_long(1000, 5000);
+
+	if (params.find("c") != params.end())
+		c = stoi(params["c"]);
+	else c = gen_long(10000, 100000);
+
+	if (params.find("m") != params.end())
+		m = stoi(params["m"]);
+	else m = gen_long(10000, 900000);
+
+	if (params.find("n") != params.end())
+		n = stoi(params["n"]);
+	else n = 10000;
+
 	vector <long long> ans;
 	ans.push_back(x0);
 	int xn = x0;
@@ -20,8 +57,33 @@ vector <long long> lc(int x0, long long a, long long c, long long m, long long n
 	return ans;
 }
 
-vector <long long> add(int k, int j, int m, int n) {
-	vector <long long> kk = lc(1, 1277, 24749, 117128, j);
+vector <long long> add(map <string, string> params) {
+	int k, j;
+	long long m, n;
+	if (params.find("k") != params.end())
+		k = stoi(params["k"]);
+	else k = gen_int(1, 2000);
+	if (params.find("j") != params.end())
+		j = stoi(params["j"]);
+	else j = gen_int(k+1, 6000);
+	
+	while (k >= j) {
+		cout << "Неверно заданы k, j (k должно быть меньше j)" << endl;
+		cout << "k = " << endl; cin >> k;
+		cout << "j = " << endl; cin >> j;
+	}
+
+	if (params.find("m") != params.end())
+		m = stoi(params["m"]);
+	else m = gen_long(1000, 15000);
+
+	if (params.find("n") != params.end())
+		n = stoi(params["n"]);
+	else n = 10000;
+
+	vector <long long> kk;
+	for (int i = 0; i < j; i++) 
+		kk.push_back(gen_long(1, 1000000));
 	vector <long long> ans;
 	int tmp = j;
 	for (int i = 0; i < n; i++) {
@@ -44,16 +106,6 @@ deque <int> bin(long long k, int p) {
 	return ans;
 }
 
-//deque <int> bin2(long long a1, long long a2, int b1, int b2) {
-//	deque <int> d1 = bin(a1, b1);
-//	deque <int> d2 = bin(a2, b2);
-//	//cout << d1.size() << endl << d2.size();
-//	deque <int> ans = d1;
-//	for (int i = 0; i < d2.size(); i++)
-//		ans.push_back(d2[i]);
-//	return ans;
-//}
-
 long long ten(vector <int> duo) {
 	string str ="";
 	for (int i = 0; i < duo.size(); i++) {
@@ -72,7 +124,45 @@ long long ten2(deque <int> duo) {
 	return ans;
 }
 
-vector <long long> five_p(int p, int q1, int q2, int q3, int w, long long k, int n) {
+vector <long long> five_p(map <string, string> params) {
+	int p, q1, q2, q3, w;
+	long long k, n;
+	if (params.find("p") != params.end())
+		p = stoi(params["p"]);
+	else p = gen_int(20, 60);
+
+	if (params.find("q1") != params.end())
+		q1 = stoi(params["q1"]);
+	else q1 = gen_int(1, p - 3);
+
+	if (params.find("q2") != params.end())
+		q2 = stoi(params["q2"]);
+	else q2 = gen_int(q1, p - 2);
+
+	if (params.find("q3") != params.end())
+		q3 = stoi(params["q3"]);
+	else q3 = gen_int(q2, p - 1);
+
+	if (params.find("w") != params.end())
+		w = stoi(params["w"]);
+	else w = gen_int(q1, p - 3);
+
+	while (!(q1 < q2 && q2 < q3 && q3 < p)) {
+		cout << "Неверно заданы p, q1, q2, q3 (q1<q2<q3<p)" << endl;
+		cout << "p = " << endl; cin >> p;
+		cout << "q1 = " << endl; cin >> q1;
+		cout << "q2 = " << endl; cin >> q2;
+		cout << "q3 = " << endl; cin >> q3;
+	}
+
+	if (params.find("k") != params.end())
+		k = stoi(params["k"]);
+	else k = 11675432246;
+
+	if (params.find("n") != params.end())
+		n = stoi(params["n"]);
+	else n = 10000;
+
 	deque <int> bin_p = bin(k, p);
 	vector <long long> ans;
 	for (int i = 0; i < n; i++) {
@@ -88,14 +178,43 @@ vector <long long> five_p(int p, int q1, int q2, int q3, int w, long long k, int
 	return ans;
 }
 
-vector <long long> lfsr(int p, long long x, long long a, int w, int n) {
+//lfsr(40, 45841782953, 48387843145, 11, 1000);
+//int p, long long x, long long a, int w, int n
+vector <long long> lfsr(map <string, string> params) {
+	int p, w;
+	long long x, a, n;
+	if (params.find("p") != params.end())
+		p = stoi(params["p"]);
+	else p = gen_int(20, 60);
+
+	if (params.find("x") != params.end())
+		x = stoi(params["x"]);
+	else x = gen_long(9000000000, 80000000000);
+
+	if (params.find("a") != params.end())
+		a = stoi(params["a"]);
+	else a = gen_long(9000000000, 80000000000);
+
+	while (x < 5000000000) {
+		cout << "Недостаточно большой x" << endl;
+		cout << "x = " << endl; cin >> x;
+	}
+
+	while (a < 5000000000) {
+		cout << "Недостаточно большая a" << endl;
+		cout << "a = " << endl; cin >> a;
+	}
+
+	if (params.find("w") != params.end())
+		w = stoi(params["w"]);
+	else w = gen_int(7, p);
+
+	if (params.find("n") != params.end())
+		n = stoi(params["n"]);
+	else n = 10000;
+
 	deque <int> bin_p = bin(x, p);
-	//for (int i = 0; i < bin_p.size(); i++)
-	//	cout << bin_p[i];
-	//cout << endl;
 	deque <int> bin_a = bin(a, p);
-	//for (int i = 0; i < bin_a.size(); i++)
-	//	cout << bin_a[i];
 	vector <long long> ans;
 	for (int i = 0; i < n; i++) {
 		vector <int> tmp;
@@ -121,8 +240,10 @@ int bit(int p, deque <int> &bin_p, deque <int> &bin_a) {
 	return b;
 }
 
+//nfsr(31, 4862922, 3675643, 79, 3535938, 5322133, 23, 589327, 88733, 11, 1000)
+//int l1, long long x1, long long a1, int l2, long long x2, long long a2, int l3, long long x3, long long a3, int w, int n
 
-vector <long long> nfsr(int l1, long long x1, long long a1, int l2, long long x2, long long a2, int l3, long long x3, long long a3, int w, int n) {
+vector <long long> nfsr(map <string, string> params) {
 	//l1 l2 l3 должны быть взаимно простыми
 	deque <int> bin_p1 = bin(x1, l1);
 	deque <int> bin_a1 = bin(a1, l1);
@@ -350,8 +471,52 @@ vector <long long> bbs(int w, int n) {
 	return ans;
 }
 
+void setparam(string s, map <string, string> &params) {
+	//string str1 = "", str2="";
+	int pos = s.find(":");
+	string str1 = s.substr(1, pos);
+	string str2 = s.substr(pos + 1);
+	params[str1] = str2;	
+	return;
+	}
 
-int main() {
+
+int main(char *argv[]) {
+	setlocale(LC_ALL, "Russian");
+	map <string, string> params;
+	for (int i = 1; i < argv.size(); i++)
+		setparam(argv[i], params);
+
+
+
+	//string str = "";
+
+	//char a='0';
+	//while (a != '\n') {
+	//	cin >> a;
+	//	str += a;
+	//}
+	////cin >> str;
+	//cout << str << endl;
+	//vector <long long> ans;
+	//for (int i = 0; i < str.size(); i++) {
+	//	if (str[i] == '/' && str[i + 1] == 'g' && str[i + 2] == ':') {
+	//		if (str[i + 3] == 'l') {
+	//			if (str[i+4]=='c') ans = lc(1, 1277, 24749, 117128, 10000); 
+	//			if (str[i+4]=='f') ans = lfsr(40, 45841782953, 48387843145, 11, 1000);
+	//		}
+	//		if (str[i + 3] == 'a') ans = add(38, 89, 3243, 10000);
+	//		if (str[i + 3] == '5') ans = five_p(40, 8, 11, 30, 15, 11675432246, 1000);
+	//		if (str[i + 3] == 'n') ans = nfsr(31, 4862922, 3675643, 79, 3535938, 5322133, 23, 589327, 88733, 11, 1000);
+	//		if (str[i + 3] == 'm') ans = mt(15, 7, 20, 19, 36563143, 25345624, 4825411, 12, 5, 2, 7, 432556433, 25345324, 1000);
+	//		if (str[i + 3] == 'r') {
+	//			if (str[i + 4] == 'c') ans = rc4(475744824463622, 1000);
+	//			if (str[i + 4] == 's') ans = rsa(1583, 1847, 11, 1000);
+	//		}
+	//		if (str[i + 3] == 'b') ans = bbs(11, 1000);
+	//	}
+	//}
+
 	//vector <long long> ans = lc(1, 1277, 24749, 117128, 10000);
 	//vector <long long> ans = add(38, 89, 3243, 10000);
 	//vector <long long> ans = five_p(40, 8, 11, 30, 15, 11675432246, 1000);
