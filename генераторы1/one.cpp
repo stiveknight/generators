@@ -8,6 +8,7 @@
 #include <map>
 #include <cstdlib>
 #include <ctime>
+#include <algorithm>
 
 using namespace std;
 
@@ -20,6 +21,10 @@ long long gen_long(long long a, long long b) {
 	return a + rand() % b;
 }
 
+int gcd(int a, int b) {
+	return b ? gcd(b, a % b) : a;
+}
+
 vector <long long> lc(map <string, string> params) {
 	int x0;
 	long long a, c, m, n;
@@ -28,7 +33,7 @@ vector <long long> lc(map <string, string> params) {
 	else x0 = gen_int(1, 20);
 	while (x0 > 50 && x0 < 0) {
 		cout << "Выберете меньшее x0" << endl;
-		cout << "x0" << endl; cin >> x0;
+		cout << "x0 = "; cin >> x0; cout << endl;
 	}
 	if (params.find("a") != params.end())
 		a = stoi(params["a"]);
@@ -69,8 +74,8 @@ vector <long long> add(map <string, string> params) {
 	
 	while (k >= j) {
 		cout << "Неверно заданы k, j (k должно быть меньше j)" << endl;
-		cout << "k = " << endl; cin >> k;
-		cout << "j = " << endl; cin >> j;
+		cout << "k = "; cin >> k; cout << endl;
+		cout << "j = "; cin >> j; cout << endl;
 	}
 
 	if (params.find("m") != params.end())
@@ -149,10 +154,10 @@ vector <long long> five_p(map <string, string> params) {
 
 	while (!(q1 < q2 && q2 < q3 && q3 < p)) {
 		cout << "Неверно заданы p, q1, q2, q3 (q1<q2<q3<p)" << endl;
-		cout << "p = " << endl; cin >> p;
-		cout << "q1 = " << endl; cin >> q1;
-		cout << "q2 = " << endl; cin >> q2;
-		cout << "q3 = " << endl; cin >> q3;
+		cout << "p = "; cin >> p; cout << endl;
+		cout << "q1 = "; cin >> q1; cout << endl;
+		cout << "q2 = "; cin >> q2; cout << endl;
+		cout << "q3 = "; cin >> q3; cout << endl;
 	}
 
 	if (params.find("k") != params.end())
@@ -185,7 +190,7 @@ vector <long long> lfsr(map <string, string> params) {
 	long long x, a, n;
 	if (params.find("p") != params.end())
 		p = stoi(params["p"]);
-	else p = gen_int(20, 60);
+	else p = gen_int(10, 60);
 
 	if (params.find("x") != params.end())
 		x = stoi(params["x"]);
@@ -197,12 +202,12 @@ vector <long long> lfsr(map <string, string> params) {
 
 	while (x < 5000000000) {
 		cout << "Недостаточно большой x" << endl;
-		cout << "x = " << endl; cin >> x;
+		cout << "x = "; cin >> x; cout << endl;
 	}
 
 	while (a < 5000000000) {
 		cout << "Недостаточно большая a" << endl;
-		cout << "a = " << endl; cin >> a;
+		cout << "a = "; cin >> a; cout << endl;
 	}
 
 	if (params.find("w") != params.end())
@@ -245,6 +250,64 @@ int bit(int p, deque <int> &bin_p, deque <int> &bin_a) {
 
 vector <long long> nfsr(map <string, string> params) {
 	//l1 l2 l3 должны быть взаимно простыми
+	int l1, l2, l3, w;
+	long long x1, x2, x3, a1, a2, a3, n;
+
+	if (params.find("l1") != params.end())
+		l1 = stoi(params["l1"]);
+	else l1 = gen_int(5, 100);
+
+	if (params.find("l2") != params.end())
+		l2 = stoi(params["l2"]);
+	else l2 = gen_int(5, 100);
+
+	if (params.find("l3") != params.end())
+		l3 = stoi(params["l3"]);
+	else {
+		l3 = 11;
+		while (!(gcd(l1, l2) == 1 || gcd(l1, l3) == 1 || (l2, l3) == 1))
+			l3 = gen_int(5, 100);
+	}
+
+	while (!(gcd(l1, l2) == 1 || gcd(l1, l3) == 1 || (l2, l3) == 1)) {
+		cout << "l1, l2 и l3 должны быть взаимно простыми!" << endl;
+		cout << "l1 = "; cin >> l1; cout << endl;
+		cout << "l2 = "; cin >> l2; cout << endl;
+		cout << "l3 = "; cin >> l3; cout << endl;
+	}
+
+	if (params.find("w") != params.end())
+		w = stoi(params["w"]);
+	else w = gen_int(7, 15);
+
+	if (params.find("x1") != params.end())
+		x1 = stoi(params["x1"]);
+	else x1 = gen_long(1000000, 100000000);
+
+	if (params.find("x2") != params.end())
+		x2 = stoi(params["x2"]);
+	else x2 = gen_long(1000000, 100000000);
+
+	if (params.find("x3") != params.end())
+		x3 = stoi(params["x3"]);
+	else x3 = gen_long(1000000, 100000000);
+
+	if (params.find("a1") != params.end())
+		a1 = stoi(params["a1"]);
+	else a1 = gen_long(1000000, 100000000);
+
+	if (params.find("a2") != params.end())
+		a2 = stoi(params["a2"]);
+	else a2 = gen_long(1000000, 100000000);
+
+	if (params.find("a3") != params.end())
+		a3 = stoi(params["a3"]);
+	else a3 = gen_long(1000000, 100000000);
+
+	if (params.find("n") != params.end())
+		n = stoi(params["n"]);
+	else n = 10000;
+
 	deque <int> bin_p1 = bin(x1, l1);
 	deque <int> bin_a1 = bin(a1, l1);
 	deque <int> bin_p2 = bin(x2, l2);
@@ -281,9 +344,85 @@ deque <int> rigth(deque <int> a, int k) {
 	}
 	return a;
 }
-vector <long long> mt(int w, int r, int p, int q, long long x, long long a, long long f, int u, int s, int t, int l, long long b, long long c, int n) {
+
+//mt(15, 7, 20, 19, 36563143, 25345624, 4825411, 12, 5, 2, 7, 432556433, 25345324, 1000);
+//int w, int r, int p, int q, long long x, long long a, long long f, int u, int s, int t, int l, long long b, long long c, int n
+vector <long long> mt(map <string, string> params) {
 	//q<p
 	//w>r
+
+	int w, r, p, q, u, s, t, l;
+	long long x, a, f, b, c, n;
+
+	if (params.find("n") != params.end())
+		n = stoi(params["n"]);
+	else n = 10000;
+
+	if (params.find("w") != params.end())
+		w = stoi(params["w"]);
+	else w = gen_int(7, 15);
+
+	if (params.find("r") != params.end())
+		r = stoi(params["r"]);
+	else r = gen_int(4, w-1);
+
+	if (params.find("p") != params.end())
+		p = stoi(params["p"]);
+	else p = gen_int(10, 60);
+
+	if (params.find("q") != params.end())
+		q = stoi(params["q"]);
+	else q = gen_int(7, p-1);
+
+	while (!(q < p)) {
+		cout << "Неверно заданы q, p (q<p)" << endl;
+		cout << "p = "; cin >> p; cout << endl;
+		cout << "q = "; cin >> q; cout << endl;
+	}
+
+	while (!(r < w)) {
+		cout << "Неверно заданы r, w (r<w)" << endl;
+		cout << "p = "; cin >> p; cout << endl;
+		cout << "q = "; cin >> q; cout << endl;
+	}
+
+	if (params.find("u") != params.end())
+		u = stoi(params["u"]);
+	else u = gen_int(1, w - 1);
+
+	if (params.find("s") != params.end())
+		s = stoi(params["s"]);
+	else s = gen_int(1, w - 1);
+
+	if (params.find("t") != params.end())
+		t = stoi(params["t"]);
+	else t = gen_int(1, w - 1);
+
+	if (params.find("l") != params.end())
+		l = stoi(params["l"]);
+	else l = gen_int(1, w - 1);
+
+
+	if (params.find("x") != params.end())
+		x = stoi(params["x"]);
+	else x = gen_long(1000000, 100000000);
+
+	if (params.find("a") != params.end())
+		a = stoi(params["a"]);
+	else a = gen_long(1000000, 100000000);
+
+	if (params.find("f") != params.end())
+		f = stoi(params["f"]);
+	else f = gen_long(1000000, 100000000);
+
+	if (params.find("b") != params.end())
+		b = stoi(params["b"]);
+	else b = gen_long(1000000, 100000000);
+
+	if (params.find("c") != params.end())
+		c = stoi(params["c"]);
+	else c = gen_long(1000000, 100000000);
+
 	vector <deque<int>> X;
 	vector <deque<int>> Z;
 	deque <int> tmp = bin(x, w);
@@ -348,7 +487,24 @@ int kk(deque <int> K, int k) {
 	return ten2(tmp);
 }
 
-vector <long long> rc4(long long k, int n) {
+//rc4(475744824463622, 1000);
+//long long k, int n
+vector <long long> rc4(map <string, string> params) {
+	long long k, n;
+
+	if (params.find("n") != params.end())
+		n = stoi(params["n"]);
+	else n = 10000;
+
+	if (params.find("k") != params.end())
+		k = stoi(params["k"]);
+	else k = gen_long(100000000000, 90000000000000);
+
+	while (k < 50000000000) {
+		cout << "Недостаточно большой k" << endl;
+		cout << "k = "; cin >> k; cout << endl;
+	}
+
 	deque <int> K = bin(k, 256);
 	vector <long long> s;
 	for (int i = 0; i < 256; i++)
@@ -371,9 +527,6 @@ vector <long long> rc4(long long k, int n) {
 	return ans;
 }
 
-int gcd(int a, int b) {
-	return b ? gcd(b, a % b) : a;
-}
 
 long long powModN(long long x, int y, long long n) {
 	long long result = 1;
@@ -383,7 +536,62 @@ long long powModN(long long x, int y, long long n) {
 	return result;
 }
 
-vector <long long> rsa(long long p, long long q, int w, int n) {
+vector <long long> test_ferma() {
+	vector <long long> simple;
+	for (int p = 500; p < 5000; p++) {
+		for (int a = 1; a < p; a++) {
+			if (gcd(a, p) == 1) {
+				if (!((powModN(a, p - 1, p)) % p == 1))
+					break;
+			}
+		}
+		simple.push_back(p);
+	}
+	return simple;
+}
+
+bool is_simple(long long q, vector <long long> &simple) {
+	auto it = lower_bound(simple.begin(),  simple.end(), q);
+	if (*it == q)
+		return true;
+	else
+		return false;
+}
+
+
+//rsa(1583, 1847, 11, 1000);
+//long long p, long long q, int w, int n
+vector <long long> rsa(map <string, string> params) {
+	int w;
+	long long p, q, n;
+
+	if (params.find("n") != params.end())
+		n = stoi(params["n"]);
+	else n = 10000;
+
+	vector <long long> simple = test_ferma();
+
+	if (params.find("w") != params.end())
+		w = stoi(params["w"]);
+	else w = gen_int(7, 15);
+
+	if (params.find("p") != params.end())
+		p = stoi(params["p"]);
+	else {
+		int tmp = gen_int(1, simple.size()-1);
+		p = simple[tmp];
+	}
+
+	if (params.find("q") != params.end())
+		q = stoi(params["q"]);
+	else q = simple[0];
+
+	while (!(is_simple(q, simple) && is_simple(p, simple))) {
+		cout << "Неверно заданы q, p (q и p должны быть простыми > 500)" << endl;
+		cout << "p = "; cin >> p; cout << endl;
+		cout << "q = "; cin >> q; cout << endl;
+	}
+
 	long long N = p*q;
 	long long f = (p - 1)*(q - 1);
 	int e = 1;
@@ -414,19 +622,6 @@ vector <long long> rsa(long long p, long long q, int w, int n) {
 	return ans;
 }
 
-vector <long long> test_ferma() {
-	vector <long long> simple;
-	for (int p = 500; p < 2000; p++) {
-		for (int a = 1; a < p; a++) {
-			if (gcd(a, p) == 1) {
-				if (!((powModN(a, p - 1, p)) % p == 1))
-					break;
-			}
-		}
-		simple.push_back(p);
-	}
-	return simple;
-}
 
 vector <long long> bbs(int w, int n) {
 	//p q простые сравнимые с 3 по модулю 4
