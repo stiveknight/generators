@@ -17,7 +17,7 @@ int gen_int(int a, int b) {
 	return a + rand() % b;
 }
 long long gen_long(long long a, long long b) {
-	srand(time(0));
+	//srand(time(0));
 	return a + rand() % b;
 }
 
@@ -62,6 +62,7 @@ vector <long long> lc(map <string, string> params) {
 	return ans;
 }
 
+//add(38, 89, 3243, 10000);
 vector <long long> add(map <string, string> params) {
 	int k, j;
 	long long m, n;
@@ -90,7 +91,7 @@ vector <long long> add(map <string, string> params) {
 	for (int i = 0; i < j; i++) 
 		kk.push_back(gen_long(1, 1000000));
 	vector <long long> ans;
-	int tmp = j;
+	//int tmp = j;
 	for (int i = 0; i < n; i++) {
 		int x = (kk[j + i - k] + kk[i]) % m;
 		kk.push_back(x);
@@ -538,14 +539,18 @@ long long powModN(long long x, int y, long long n) {
 
 vector <long long> test_ferma() {
 	vector <long long> simple;
-	for (int p = 500; p < 5000; p++) {
-		for (int a = 1; a < p; a++) {
+	for (int p = 500; p < 3000; p++) {
+		bool f = false;
+		for (int a = 2; a < p; a++) {
 			if (gcd(a, p) == 1) {
-				if (!((powModN(a, p - 1, p)) % p == 1))
+				if (!((powModN(a, p - 1, p)) % p == 1)) {
+					f = true;
 					break;
+				}
 			}
 		}
-		simple.push_back(p);
+		if (!f)
+			simple.push_back(p);
 	}
 	return simple;
 }
@@ -575,16 +580,23 @@ vector <long long> rsa(map <string, string> params) {
 		w = stoi(params["w"]);
 	else w = gen_int(7, 15);
 
+	int tmp1, tmp2;
+
 	if (params.find("p") != params.end())
 		p = stoi(params["p"]);
 	else {
-		int tmp = gen_int(1, simple.size()-1);
-		p = simple[tmp];
+		tmp1 = gen_int(0, simple.size()-1);
+		p = simple[tmp1];
 	}
 
 	if (params.find("q") != params.end())
 		q = stoi(params["q"]);
-	else q = simple[0];
+	else {
+		tmp2 = tmp1;
+		while (tmp2==tmp1)
+			tmp2 = gen_int(0, simple.size() - 1);
+		q = simple[tmp2];
+	}
 
 	while (!(is_simple(q, simple) && is_simple(p, simple))) {
 		cout << "Неверно заданы q, p (q и p должны быть простыми > 500)" << endl;
@@ -622,23 +634,65 @@ vector <long long> rsa(map <string, string> params) {
 	return ans;
 }
 
-
-vector <long long> bbs(int w, int n) {
+//ans = bbs(11, 1000);
+//int w, int n
+vector <long long> bbs(map <string, string> params) {
 	//p q простые сравнимые с 3 по модулю 4
 	//(p-3)%4==0 (q-3)%4==0 
-	vector <long long> simple = test_ferma();
+	int w, n;
+
+	if (params.find("n") != params.end())
+		n = stoi(params["n"]);
+	else n = 10000;
+
+	if (params.find("w") != params.end())
+		w = stoi(params["w"]);
+	else w = gen_int(7, 15);
+	int tmp1, tmp2;
+	vector <long long> simple, simple_true;
 	long long p, q;
-	for (int i = 0; i < simple.size(); i++) {
-		if ((simple[i] - 3) % 4 == 0) {
-			p = simple[i];
-			for (int j = i + 1; j < simple.size(); j++)
-				if ((simple[j] - 3) % 4 == 0) {
-					q = simple[j];
-					break;
-				}
-			break;
-		}
+
+	if (params.find("p") == params.end() || params.find("q") == params.end()) {
+
+		simple = test_ferma();
+
+		for (int i = 0; i < simple.size(); i++)
+			if ((simple[i] - 3) % 4 == 0)
+				simple_true.push_back(simple[i]);
+
+		tmp1 = gen_int(0, simple_true.size() - 1);
+		tmp2 = tmp1;
 	}
+
+	if (params.find("p") != params.end())
+		p = stoi(params["p"]);
+	else p = simple_true[tmp1];
+
+	if (params.find("q") != params.end())
+		q = stoi(params["q"]);
+	else {
+		while (tmp2 == tmp1)
+			tmp2 = gen_int(0, simple_true.size() - 1);
+		q = simple_true[tmp2];
+	}
+
+	while (!((q - 3) % 4 == 0 && (p - 3) % 4 == 0)) {
+		cout << "Неверно заданы q, p (q и p должны быть простыми сравнимыми с 3 по модулю 4)" << endl;
+		cout << "p = "; cin >> p; cout << endl;
+		cout << "q = "; cin >> q; cout << endl;
+	}
+
+	//for (int i = 0; i < simple.size(); i++) {
+	//	if ((simple[i] - 3) % 4 == 0) {
+	//		p = simple[i];
+	//		for (int j = i + 1; j < simple.size(); j++)
+	//			if ((simple[j] - 3) % 4 == 0) {
+	//				q = simple[j];
+	//				break;
+	//			}
+	//		break;
+	//	}
+	//}
 
 	long long N = p*q;
 	long long x = 1;
@@ -669,49 +723,41 @@ vector <long long> bbs(int w, int n) {
 void setparam(string s, map <string, string> &params) {
 	//string str1 = "", str2="";
 	int pos = s.find(":");
-	string str1 = s.substr(1, pos);
+	string str1 = s.substr(1, pos - 1);
 	string str2 = s.substr(pos + 1);
 	params[str1] = str2;	
 	return;
 	}
 
 
-int main(char *argv[]) {
+int main(int argc, char* argv[]) {
 	setlocale(LC_ALL, "Russian");
 	map <string, string> params;
-	for (int i = 1; i < argv.size(); i++)
+	for (int i = 1; i < argc; i++)
 		setparam(argv[i], params);
 
+	vector <long long> ans;
 
+	if (params["g"] == "add")
+		ans = add(params);
+	if (params["g"] == "lc")
+		ans = lc(params);
+	if (params["g"] == "5p")
+		ans = five_p(params);
+	if (params["g"] == "lfsr")
+		ans = lfsr(params);
+	if (params["g"] == "nfsr")
+		ans = nfsr(params);
+	if (params["g"] == "mt")
+		ans = mt(params);
+	if (params["g"] == "rc4")
+		ans = rc4(params);
+	if (params["g"] == "rsa")
+		ans = rsa(params);
+	if (params["g"] == "bbs")
+		ans = bbs(params);
 
-	//string str = "";
-
-	//char a='0';
-	//while (a != '\n') {
-	//	cin >> a;
-	//	str += a;
-	//}
-	////cin >> str;
-	//cout << str << endl;
-	//vector <long long> ans;
-	//for (int i = 0; i < str.size(); i++) {
-	//	if (str[i] == '/' && str[i + 1] == 'g' && str[i + 2] == ':') {
-	//		if (str[i + 3] == 'l') {
-	//			if (str[i+4]=='c') ans = lc(1, 1277, 24749, 117128, 10000); 
-	//			if (str[i+4]=='f') ans = lfsr(40, 45841782953, 48387843145, 11, 1000);
-	//		}
-	//		if (str[i + 3] == 'a') ans = add(38, 89, 3243, 10000);
-	//		if (str[i + 3] == '5') ans = five_p(40, 8, 11, 30, 15, 11675432246, 1000);
-	//		if (str[i + 3] == 'n') ans = nfsr(31, 4862922, 3675643, 79, 3535938, 5322133, 23, 589327, 88733, 11, 1000);
-	//		if (str[i + 3] == 'm') ans = mt(15, 7, 20, 19, 36563143, 25345624, 4825411, 12, 5, 2, 7, 432556433, 25345324, 1000);
-	//		if (str[i + 3] == 'r') {
-	//			if (str[i + 4] == 'c') ans = rc4(475744824463622, 1000);
-	//			if (str[i + 4] == 's') ans = rsa(1583, 1847, 11, 1000);
-	//		}
-	//		if (str[i + 3] == 'b') ans = bbs(11, 1000);
-	//	}
-	//}
-
+	ans = add(params);
 	//vector <long long> ans = lc(1, 1277, 24749, 117128, 10000);
 	//vector <long long> ans = add(38, 89, 3243, 10000);
 	//vector <long long> ans = five_p(40, 8, 11, 30, 15, 11675432246, 1000);
@@ -720,12 +766,11 @@ int main(char *argv[]) {
 	//vector <long long> ans = mt(15, 7, 20, 19, 36563143, 25345624, 4825411, 12, 5, 2, 7, 432556433, 25345324, 1000);
 	//vector <long long> ans = rc4(475744824463622, 1000);
 	//vector <long long> ans = rsa(1583, 1847, 11, 1000);
-	vector <long long> ans = bbs(11, 1000);
+	//vector <long long> ans = lc(params);
 	for (int i = 0; i < ans.size(); i++) {
 		//if (ans[i]<100)
 		cout << ans[i] << ' ';
 	}
-	//lc(7, 8, 9, 10, 100);
 	system("pause");
 	return 0;
 }

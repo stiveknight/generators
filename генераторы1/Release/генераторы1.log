@@ -1,0 +1,24 @@
+﻿  one.cpp
+one.cpp(16): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+one.cpp(20): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+one.cpp(60): warning C4244: =: преобразование "__int64" в "int", возможна потеря данных
+one.cpp(95): warning C4244: инициализация: преобразование "__int64" в "int", возможна потеря данных
+one.cpp(104): warning C4018: <: несоответствие типов со знаком и без знака
+one.cpp(108): warning C4018: <: несоответствие типов со знаком и без знака
+one.cpp(116): warning C4018: <: несоответствие типов со знаком и без знака
+one.cpp(125): warning C4018: <: несоответствие типов со знаком и без знака
+one.cpp(449): warning C4018: <: несоответствие типов со знаком и без знака
+one.cpp(477): warning C4018: <: несоответствие типов со знаком и без знака
+one.cpp(485): warning C4018: <: несоответствие типов со знаком и без знака
+one.cpp(487): warning C4244: return: преобразование "__int64" в "int", возможна потеря данных
+one.cpp(610): warning C4244: аргумент: преобразование "__int64" в "int", возможна потеря данных
+one.cpp(630): warning C4018: <: несоответствие типов со знаком и без знака
+one.cpp(658): warning C4018: <: несоответствие типов со знаком и без знака
+one.cpp(699): warning C4244: аргумент: преобразование "__int64" в "int", возможна потеря данных
+one.cpp(716): warning C4018: <: несоответствие типов со знаком и без знака
+one.cpp(769): warning C4018: <: несоответствие типов со знаком и без знака
+  Создание кода
+  All 768 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Создание кода завершено
+  генераторы1.vcxproj -> C:\Users\user\Documents\Visual Studio 2015\Projects\генераторы1\Release\генераторы1.exe
+  генераторы1.vcxproj -> C:\Users\user\Documents\Visual Studio 2015\Projects\генераторы1\Release\генераторы1.pdb (Full PDB)
